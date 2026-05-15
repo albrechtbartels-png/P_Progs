@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import os
 import glob
 import pandas as pd
@@ -44,7 +46,8 @@ class Config:
     """Zentrale Konfigurationsklasse für alle Konstanten."""
     
     # Pfade und Datenquellen
-    DATA_DIR = '/Users/alli/Documents/01_Privat/01_Dokumente/06 Gebäude und Liegenschaft/01 Bubikon/Solaranlage Bubikon 2021/5 Energiebilanz'
+    # Standardmäßig wird der Benutzer zur Auswahl des Datenverzeichnisses aufgefordert
+    DATA_DIR = None  # Wird zur Laufzeit gesetzt
     CSV_COLUMNS = [
         'Datum und Uhrzeit',
         'Gesamt Erzeugung',
@@ -873,12 +876,32 @@ class SolarDashboard:
         self.root.mainloop()
 
 
+def select_data_directory() -> str:
+    """Fordert den Benutzer auf, das Datenverzeichnis auszuwählen."""
+    root = tk.Tk()
+    root.withdraw()  # Fenster verstecken
+    
+    data_dir = filedialog.askdirectory(
+        title='Wählen Sie das Verzeichnis mit den Solar-Daten (CSV-Dateien)',
+        initialdir=os.path.expanduser('~/Desktop')
+    )
+    
+    if not data_dir:
+        messagebox.showerror('Fehler', 'Kein Verzeichnis ausgewählt. Die Anwendung wird beendet.')
+        exit(1)
+    
+    return data_dir
+
+
 if __name__ == '__main__':
+    # Datenverzeichnis auswählen
+    Config.DATA_DIR = select_data_directory()
+    
     # Daten laden
     df = DataProcessor.load_csv_files(Config.DATA_DIR)
     
     if df.empty:
-        print(f"Fehler: Keine CSV-Dateien im Verzeichnis gefunden: {Config.DATA_DIR}")
+        messagebox.showerror('Fehler', f'Keine CSV-Dateien im Verzeichnis gefunden: {Config.DATA_DIR}')
         exit(1)
     
     # Pivot-Tabellen erstellen
