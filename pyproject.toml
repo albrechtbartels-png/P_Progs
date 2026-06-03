@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "solar-dashboard"
+version = "1.0.0"
+description = "Solar Dashboard zur Analyse und Visualisierung von Solaranlagendaten"
+authors = [{ name = "Albrecht Bartels" }]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "pandas>=2.0.0",
+    "matplotlib>=3.7.0",
+    "openpyxl>=3.1.0",
+    "numpy>=1.24.0",
+]
+
+[project.scripts]
+solar-dashboard = "src.main:main"
+
+[project.optional-dependencies]
+dev = [
+    "black>=23.0",
+    "isort>=5.12",
+    "flake8>=6.0",
+    "mypy>=1.0",
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.black]
+line-length = 88
+target-version = ["py38", "py39", "py310", "py311"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"

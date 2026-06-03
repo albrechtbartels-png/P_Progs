@@ -1,5 +1,5 @@
-# Abhängigkeiten für Solar2.py (Solar Dashboard)
-# Installieren mit: pip3 install -r requirements.txt
+# Abhängigkeiten für Solar Dashboard
+# Installieren mit: pip install -r requirements.txt
 
 pandas>=2.0.0
 matplotlib>=3.7.0
